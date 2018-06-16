@@ -45,7 +45,7 @@ class QueryProcessor {
             TopDocs hits = indexSearcher.search(query, Integer.MAX_VALUE);
 
             for (ScoreDoc foundDoc : hits.scoreDocs) {
-                results.add(indexReader.document(foundDoc.doc).get("originalMVLine"));
+                results.add(indexReader.document(foundDoc.doc).get(BooleanQueryLucene.originalMVLine));
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();

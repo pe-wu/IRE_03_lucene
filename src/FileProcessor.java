@@ -1,9 +1,6 @@
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -27,22 +24,22 @@ class FileProcessor {
     private static String titleLine = null;
     private static StringBuilder plotText = new StringBuilder();
 
-    private static String pattern = "mv {2}(.+) \\(([ \\d]{4}[^)]*)\\) ?(?:\\{([^}]*)})?(\\(v\\))?(\\(vg\\))?" +
-            "(\\(tv\\))?";
+    private static String pattern =
+            "mv {2}(.+) \\(([ \\d]{4}[^)]*)\\) ?(?:\\{([^}]*)})?(\\(v\\))?(\\(vg\\))?(\\(tv\\))?";
     private static Pattern regEx = Pattern.compile(pattern);
 
     void buildIndices(Path plotFile) {
 
         try {
-            Directory directory = FSDirectory.open(Paths.get(BooleanQueryLucene.indexPath));
             Analyzer analyzer = new StandardAnalyzer();
+            Directory directory = FSDirectory.open(Paths.get(BooleanQueryLucene.indexPath));
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
             iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
             writer = new IndexWriter(directory, iwc);
 
             indexDocs(plotFile);
 
-//            writer.forceMerge(1);
+            writer.forceMerge(1);
             writer.commit();
             writer.close();
 
@@ -73,20 +70,18 @@ class FileProcessor {
             clearProcessor();
         }
     };
-    private int i = 0;
 
     private void saveDocument() throws IOException {
-        System.out.println(i++);
         Matcher m = regEx.matcher(normalize(titleLine));
 
         if (m.find()) {
             Document doc = new Document();
-            doc.add(new StringField("originalMVLine", titleLine, Field.Store.YES));
+            doc.add(new StoredField(BooleanQueryLucene.originalMVLine, titleLine));
             doc.add(new StringField("type", evaluateDocType(m), Field.Store.NO));
             doc.add(new StringField("year", m.group(2), Field.Store.NO));
 
             doc.add(new TextField("title", withoutQuotationMarks(m.group(1)), Field.Store.NO));
-            doc.add(new TextField("plot", normalize(plotText.toString()), Field.Store.NO));
+            doc.add(new TextField("plot", plotText.toString(), Field.Store.NO));
             if (m.group(3) != null) {
                 doc.add(new TextField("episodetitle", m.group(3), Field.Store.NO));
             }

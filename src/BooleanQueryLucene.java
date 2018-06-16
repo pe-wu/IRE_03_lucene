@@ -10,15 +10,14 @@ import java.util.*;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 public class BooleanQueryLucene {
-    private static FileProcessor fp;
-    private static QueryProcessor qp;
+    private QueryProcessor qp;
+    static String originalMVLine = "originalMVLine";
     static String indexPath = "./indicies";
 
     /**
      * DO NOT CHANGE THE CONSTRUCTOR. DO NOT ADD PARAMETERS TO THE CONSTRUCTOR.
      */
     public BooleanQueryLucene() {
-        qp = new QueryProcessor();
     }
 
     /**
@@ -34,8 +33,9 @@ public class BooleanQueryLucene {
      *                 use.
      */
     public void buildIndices(Path plotFile) {
-        fp = new FileProcessor();
+        FileProcessor fp = new FileProcessor();
         fp.buildIndices(plotFile);
+        qp = new QueryProcessor();
     }
 
     /**
@@ -83,7 +83,7 @@ public class BooleanQueryLucene {
      * DO NOT CHANGE THIS METHOD'S INTERFACE.
      */
     public void close() {
-        // TODO: you may insert code here
+        //nothing
     }
 
     public static void main(String[] args) {
