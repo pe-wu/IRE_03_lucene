@@ -21,7 +21,6 @@ class QueryProcessor {
     private IndexReader indexReader;
     private IndexSearcher indexSearcher;
 
-
     QueryProcessor() {
         String[] queryFields = {"title", "plot", "type", "year", "episodetitle"};
         Analyzer analyzer = new StandardAnalyzer();

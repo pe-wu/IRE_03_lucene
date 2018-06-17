@@ -12,7 +12,7 @@ import static java.nio.charset.StandardCharsets.ISO_8859_1;
 public class BooleanQueryLucene {
     private QueryProcessor qp;
     static String originalMVLine = "originalMVLine";
-    static String indexPath = "./indicies";
+    static String indexPath = "./indices";
 
     /**
      * DO NOT CHANGE THE CONSTRUCTOR. DO NOT ADD PARAMETERS TO THE CONSTRUCTOR.
