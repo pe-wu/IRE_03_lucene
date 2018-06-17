@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +24,7 @@ class FileProcessor {
     private static StringBuilder plotText = new StringBuilder();
 
     private static String pattern =
-            "mv {2}(.+) \\(([ \\d]{4}[^)]*)\\) ?(?:\\{([^}]*)})?(\\(v\\))?(\\(vg\\))?(\\(tv\\))?";
+            "MV {2}(.+) \\(([ \\d]{4}[^)]*)\\) ?(?:\\{([^}]*)})?(\\(V\\))?(\\(VG\\))?(\\(TV\\))?";
     private static Pattern regEx = Pattern.compile(pattern);
 
     void buildIndices(Path plotFile) {
@@ -114,7 +113,7 @@ class FileProcessor {
     }
 
     private String normalize(String text) {
-        return text.toLowerCase(Locale.ENGLISH).replaceAll("[.,:!?]", " ");
+        return text.replaceAll("[.,:!?]", " ");
     }
 
     private void saveTitleLine(String line) {
